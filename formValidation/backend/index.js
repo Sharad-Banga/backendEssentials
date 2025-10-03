@@ -1,23 +1,29 @@
 import express from "express";
 import {z} from "zod";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 app.use(express.json());
 
+const limitMiddleware = rateLimit({
+  windowMs : 60 * 1000,
+  max : 5,
+  message : {error : "too many attempts"}
+})
 
 //zod validation
 
 const zotPasses = z.object({
   email : z.string().includes("@"),
   password : z.string()
-              .min(8)
-              .max(8)
-              .regex(/[A-Z]/)
-              .regex(/[0-9]/)
+              .min(8,"at least 8 char")
+              .max(8,"at most 8 char")
+              .regex(/[A-Z]/,"must contain A-Z")
+              .regex(/[0-9]/,"must contain a-z")
 })
 
 
-app.post("/signupp",(req,res)=>{
+app.post("/signupp",limitMiddleware,(req,res)=>{
   // console.log("sss");
   const zoo = zotPasses.safeParse(req.body);
 
@@ -30,7 +36,8 @@ app.post("/signupp",(req,res)=>{
   }
   else{
     res.json({
-      "messgae" : "noooooooooooooooo"
+      "messgae" : "noooooooooooooooo",
+      "erroe" : zoo.error.message
     })
   }
 

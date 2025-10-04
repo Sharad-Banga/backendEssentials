@@ -2,34 +2,51 @@ import { useForm } from "react-hook-form"
 import './App.css'
 
 function App() {
-  const {
+    const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    
+    formState: {isSubmitting, errors },
   } = useForm()
-
   return (
-    <>
+    <>sss
 
-      <form onSubmit={handleSubmit((data)=>{
-          console.log("data is ",data);
-          
+      <form onSubmit={handleSubmit(async(data)=>{
+        await new Promise((resolve)=>{
+          setTimeout(resolve , 3000);
+        })
+        console.log(data);
+        
       })}>
 
-          <div>
-            <label >First name</label>
-            <input type="text"  {...register("email" , {required:true })} />
-          </div>
+        <div>
+          <label htmlFor="">email</label>
+          <input type="text" {...register("email" , {required:true ,
+            pattern:{
+              value:/^[A-Za-z0-9+$]/,
+              message:"enter valid gmail"
+            }
+          })}  />
+        </div>
 
-          <div>
-            <label >First name</label>
-            <input type="text"  {...register("password" , {required:true})} />
-          </div>
+        <div>
+          <label htmlFor="">password</label>
+          <input type="text" {...register("password" , {required:true , 
+          
+          pattern:{
+            value : /^[A-Za-z0-9]+$/,
+            message : "enter valid password"
 
-          <div>
-            <input type="submit"  />
-          </div>
+          }} )} />
+
+          {errors.password && <p>{errors.password.message}</p> }
+        </div>
+
+        <div>
+          <input type="submit" disabled={isSubmitting}  />
+        </div>
+
 
       </form>
           

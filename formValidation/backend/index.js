@@ -1,9 +1,10 @@
 import express from "express";
 import {z} from "zod";
 import rateLimit from "express-rate-limit";
-
+import cors from "cors";
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const limitMiddleware = rateLimit({
   windowMs : 60 * 1000,
@@ -29,12 +30,14 @@ app.post("/signupp",limitMiddleware,(req,res)=>{
 
   if(zoo.success){
     
+    console.log("chl gea backend bhai");
     
     res.json({
       "messgae" : "ho gya bhaii"
     })
   }
   else{
+    console.log("nhi chala backend bhai");
     res.json({
       "messgae" : "noooooooooooooooo",
       "erroe" : zoo.error.message

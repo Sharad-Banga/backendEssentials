@@ -12,7 +12,7 @@ function App() {
   return (
     <>sss
 
-      <form onSubmit={handleSubmit(async(data)=>{
+      <form action="localhost:3000/signupp" onSubmit={handleSubmit(async(data)=>{
         await new Promise((resolve)=>{
           setTimeout(resolve , 3000);
         })

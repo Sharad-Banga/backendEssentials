@@ -12,13 +12,21 @@ function App() {
   return (
     <>sss
 
-      <form action="localhost:3000/signupp" onSubmit={handleSubmit(async(data)=>{
-        await new Promise((resolve)=>{
-          setTimeout(resolve , 3000);
-        })
-        console.log(data);
-        
-      })}>
+      <form  onSubmit={handleSubmit(async (data) => {
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+
+         
+          const res = await fetch("http://localhost:3000/signupp", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+
+          const result = await res.json()
+          console.log("Server response:", result)
+        })}>
 
         <div>
           <label htmlFor="">email</label>
@@ -35,7 +43,8 @@ function App() {
           <input type="text" {...register("password" , {required:true , 
           
           pattern:{
-            value : /^[A-Za-z0-9]+$/,
+            value :/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+
             message : "enter valid password"
 
           }} )} />
